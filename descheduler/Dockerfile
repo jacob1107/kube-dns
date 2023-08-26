@@ -1,1 +1,1 @@
-FROM gcr.io/ml-pipeline/mysql:5.7-debian
+FROM gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
