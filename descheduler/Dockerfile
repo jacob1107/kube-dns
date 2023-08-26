@@ -1,1 +1,1 @@
-FROM gcr.io/arrikto/istio/pilot:1.14.1-1-g19df463bb
+FROM gcr.io/arrikto/kubeflow/oidc-authservice:28c59ef
