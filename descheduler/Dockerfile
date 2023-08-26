@@ -1,1 +1,1 @@
-FROM gcr.io/arrikto/kubeflow/oidc-authservice:28c59ef
+FROM gcr.io/ml-pipeline/mysql:5.7-debian
