@@ -1,1 +1,1 @@
- FROM  gcr.io/ml-pipeline/cache-deployer:2.0.0-alpha.5
+ FROM  gcr.io/ml-pipeline/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance
