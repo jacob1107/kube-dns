@@ -1,1 +1,1 @@
- FROM  gcr.io/ml-pipeline/visualization-server:2.0.0-alpha.5
+ FROM  gcr.io/ml-pipeline/viewer-crd-controller:2.0.0-alpha.5
