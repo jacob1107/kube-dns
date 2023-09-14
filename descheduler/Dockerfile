@@ -1,1 +1,1 @@
- FROM  gcr.io/ml-pipeline/metadata-envoy:2.0.0-alpha.5
+ FROM  gcr.io/arrikto/kubeflow/oidc-authservice:28c59ef
