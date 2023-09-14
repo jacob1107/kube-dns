@@ -1,1 +1,1 @@
- FROM  gcr.io/ml-pipeline/workflow-controller:v3.3.8-license-compliance
+ FROM  gcr.io/arrikto/kubeflow/oidc-authservice:28c59ef
