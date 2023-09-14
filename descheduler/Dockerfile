@@ -1,1 +1,1 @@
- FROM  gcr.io/knative-releases/knative.dev/eventing/cmd/webhook@sha256:b7faf7d253bd256dbe08f1cac084469128989cf39abbe256ecb4e1d4eb085a31
+ FROM  gcr.io/ml-pipeline/workflow-controller:v3.3.8-license-compliance
