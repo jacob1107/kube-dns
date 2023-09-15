@@ -1,1 +1,1 @@
- FROM  gcr.io/ml-pipeline/metadata-writer:2.0.0-alpha.5
+ FROM  minio/minio:RELEASE.2021-06-17T00-10-46Z
