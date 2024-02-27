@@ -1,1 +1,1 @@
- FROM  minio/minio:RELEASE.2021-06-17T00-10-46Z
+ FROM  gcr.io/knative-releases/knative.dev/serving/cmd/activator@sha256:2a71f86db077e2af4dc02cd8662c545b8206c6d5c853056225967c719251cc20
