@@ -1,1 +1,1 @@
- FROM  gcr.io/knative-nightly/knative.dev/net-istio/cmd/webhook@sha256:5e5a7356d01eafca3803264cc37b60cb8f005462e4156f20f79855f09a3fa019
+ FROM  gcr.io/knative-releases/knative.dev/pkg/apiextensions/storageversion/cmd/migrate@sha256:9b638e01031dea1527c823e12ce740cd27949600cabaf21ef377d6e9f294558d
