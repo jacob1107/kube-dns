@@ -1,1 +1,1 @@
- FROM gcr.io/knative-releases/knative.dev/eventing/cmd/broker/filter@sha256:757cb244149a337f6bf07120d07ab43051bb4af14347cb660eb05dc8376d9879
+ FROM gcr.io/knative-releases/knative.dev/eventing/test/test_images/recordevents@sha256:283120206a8d301f0384d532fdd71fd1cb84451cd0d41d4604574e68e10e631b
