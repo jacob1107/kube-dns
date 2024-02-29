@@ -1,1 +1,1 @@
- FROM gcr.io/knative-releases/knative.dev/eventing/test/test_images/recordevents@sha256:283120206a8d301f0384d532fdd71fd1cb84451cd0d41d4604574e68e10e631b
+ FROM  gcr.io/knative-releases/knative.dev/eventing/cmd/websocketsource@sha256:c19b5285f449700be6aada4d3004e83dbec11a2019ffae94010804af3389ee23
