@@ -1,1 +1,1 @@
- FROM  gcr.io/knative-releases/knative.dev/eventing/cmd/websocketsource@sha256:c19b5285f449700be6aada4d3004e83dbec11a2019ffae94010804af3389ee23
+ FROM  gcr.io/knative-releases/knative.dev/serving/cmd/default-domain@sha256:3d48c25923a253b0dd14f864131ff50bf2711536150abc18b3890e7390f26439
