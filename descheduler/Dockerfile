@@ -1,1 +1,1 @@
- FROM  gcr.io/knative-releases/knative.dev/eventing/cmd/heartbeats@sha256:95961464b82f9ff61ad42b6251557b4ff0b053efbf6b9367e117e7aeea5e7262
+ FROM  gcr.io/knative-releases/knative.dev/eventing/cmd/event_display@sha256:267d35734536a48d7b56f4f728ec8eb5917a38f8859ce19c164eee607e37c6ee
