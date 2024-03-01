@@ -1,1 +1,1 @@
- FROM  kserve/kserve-controller:v0.9.0
+ FROM  gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
