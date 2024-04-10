@@ -1,13 +1,14 @@
-dockerfileCopy code# 第一个构建阶段，用于构建应用程序
-FROM node:14 AS build
-WORKDIR /app
-COPY . .
-RUN npm install
-RUN npm run build
-
-# 第二个构建阶段，用于运行应用程序
-FROM node:14-alpine
-WORKDIR /app
-COPY --from=build /app/build ./build
-RUN npm install -g serve
-CMD ["serve", "-s", "build"]
+FROM golang:1.11.4-alpine3.8 AS build-env
+ 
+ENV GO111MODULE=off
+ENV GO15VENDOREXPERIMENT=1
+ENV GITPATH=github.com/lattecake/hello
+RUN mkdir -p /go/src/${GITPATH}
+COPY ./ /go/src/${GITPATH}
+RUN cd /go/src/${GITPATH} && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install -v
+ 
+FROM alpine:latest
+ENV apk –no-cache add ca-certificates
+COPY --from=build-env /go/bin/hello /root/hello
+WORKDIR /root
+CMD ["/root/hello"]
