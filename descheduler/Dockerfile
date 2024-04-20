@@ -1,1 +1,1 @@
-FROM  kfserving/image-transformer-v2:latest
+FROM  gcr.io/knative-releases/knative.dev/eventing/cmd/event_display
