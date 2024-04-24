@@ -1,1 +1,1 @@
-FROM  gcr.io/knative-releases/knative.dev/eventing/cmd/event_display
+FROM  gcr.io/knative-releases/knative.dev/serving/cmd/autoscaler-hpa:940
