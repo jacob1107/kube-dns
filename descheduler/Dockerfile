@@ -1,1 +1,1 @@
-FROM  gcr.io/knative-releases/knative.dev/serving/cmd/autoscaler-hpa:940
+FROM  gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
