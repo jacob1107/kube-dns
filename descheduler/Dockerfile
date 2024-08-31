@@ -1,1 +1,1 @@
-FROM  linuxserver/wireshark:4.2.5   --platform  linux/arm64
+FROM  python:3.9-slim-bullseye
