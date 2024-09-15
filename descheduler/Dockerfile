@@ -1,1 +1,1 @@
-FROM  pantsel/konga:0.14.9
+FROM  postgres:9.6
