@@ -1,1 +1,1 @@
-FROM  kong/kong-gateway:2.6.1.0
+FROM  openjdk:8-jdk-alpine
