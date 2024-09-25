@@ -1,1 +1,1 @@
-FROM  openjdk:8-jdk-alpine
+FROM  tensorflow/serving:2.6.2
