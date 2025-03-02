@@ -1,1 +1,1 @@
-FROM  langgenius/dify-api:0.15.2
+FROM  ubuntu/squid:latest
