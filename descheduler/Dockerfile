@@ -1,1 +1,3 @@
-FROM  ubuntu/squid:latest
+FROM ubuntu/squid:latest
+
+
