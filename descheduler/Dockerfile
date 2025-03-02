@@ -1,1 +1,1 @@
-FROM  k8s.gcr.io/descheduler/descheduler:v0.23.1
+FROM  semitechnologies/weaviate:1.19.0
