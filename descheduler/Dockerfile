@@ -1,2 +1,2 @@
-FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+FROM vllm/vllm-openai:v0.7.3
 
