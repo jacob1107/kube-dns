@@ -1,2 +1,2 @@
-FROM vllm/vllm-openai:v0.7.3
+FROM  lmsysorg/sglang:v0.4.3.post1-cu121
 
