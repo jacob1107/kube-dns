@@ -1,2 +1,2 @@
-FROM  lmsysorg/sglang:v0.4.3.post1-cu121
+FROM  nvidia/cuda:12.4.1-devel-ubuntu20.04
 
