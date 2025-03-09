@@ -1,2 +1,2 @@
-FROM  docker.io/nvidia/cuda:12.4.1-devel-ubuntu22.04
+FROM  docker.io/docker/dockerfile:1.7
 
