@@ -1,6 +1,5 @@
 # 使用官方最小化构建 (focal-20230624)
-FROM ubuntu@sha256:7a6a5c760ef7b8fe87acfef691b5b0c7b7e88d82b679c8a1c7b0c0aec7aadf3b
-
+FROM ubuntu:noble-20250127
 # 单层构建减少镜像体积
 RUN export DEBIAN_FRONTEND=noninteractive && \
     # 配置时区避免交互提示
