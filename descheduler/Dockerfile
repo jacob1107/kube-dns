@@ -1,13 +1,27 @@
-# 使用 Ubuntu 20.04 官方镜像作为基础
-FROM ubuntu:20.04
+# 使用官方最小化构建 (focal-20230624)
+FROM ubuntu@sha256:7a6a5c760ef7b8fe87acfef691b5b0c7b7e88d82b679c8a1c7b0c0aec7aadf3b
 
-# 更新软件源并安装所需工具（非交互模式）
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    wget \
-    curl \
-    s3cmd \
-    && rm -rf /var/lib/apt/lists/*
-
-# 可选：设置默认工作目录
-WORKDIR /app
+# 单层构建减少镜像体积
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    # 配置时区避免交互提示
+    ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
+    # 组合所有操作减少层体积
+    apt-get update -qqy \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        wget \
+        curl \
+        s3cmd \
+        tar \
+        zip \
+    # 深度清理
+    && apt-get clean -y \
+    && apt-get autoremove -y \
+    && rm -rf \
+        /var/lib/apt/lists/* \
+        /var/cache/apt/archives/*.deb \
+        /var/cache/apt/*.bin \
+        /var/log/alternatives.log \
+        /var/log/dpkg.log \
+        /tmp/* \
+        /var/tmp/*
