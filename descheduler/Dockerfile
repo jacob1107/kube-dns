@@ -1,2 +1,2 @@
 # 使用官方最小化构建 (focal-20230624)
-FROM lmsysorg/sglang:v0.4.5-cu125
+FROM macrosan/kylin:v10-sp3-2403
