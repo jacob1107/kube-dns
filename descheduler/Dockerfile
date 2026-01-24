@@ -17,6 +17,5 @@ RUN cat > ~/.vimrc <<-'EOF'
 EOF
 
 # 使用HTTPS镜像源并合并pip操作
-RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple && \
-    pip install --no-cache-dir   "evalscope[all]"
+RUN  pip install --no-cache-dir   "evalscope[all]"==1.4.2
 
