@@ -1,1 +1,1 @@
-FROM  quay.io/ascend/vllm-ascend:v0.13.0rc1
+FROM  quay-pull.ygxz.in/ascend/cann:8.3.rc2-910b-openeuler24.03-py3.11
