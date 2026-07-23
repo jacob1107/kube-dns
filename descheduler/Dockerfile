@@ -1,1 +1,1 @@
-FROM  kvcacheai/mooncake:0.3.11.post1
+FROM  nvidia/cuda:12.4.1-devel-ubuntu22.04
