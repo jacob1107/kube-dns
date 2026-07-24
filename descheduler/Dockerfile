@@ -25,6 +25,7 @@ RUN cmake .. \
       -DBUILD_EXAMPLES=ON \
       -DUSE_CUDA=ON \
       -DUSE_MNNVL=ON \
+      -DUSE_TENT=ON \
       -DUSE_INTRA_NVLINK=ON \
       -DUSE_TCP=ON \
       -DUSE_HTTP=ON \
