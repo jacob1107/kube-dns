@@ -1,93 +1,47 @@
-FROM nvidia/cuda:12.9.1-devel-ubuntu22.04
 
-ENV DEBIAN_FRONTEND=noninteractive
 
-# ========== 1. 基础系统与编译工具 ==========
-RUN apt-get update && apt-get install -y \
-    git \
-    cmake \
-    g++ \
-    gcc \
-    build-essential \
-    pkg-config \
-    libibverbs-dev \
-    libnuma-dev \
-    libgoogle-glog-dev \
-    libgflags-dev \
-    libjsoncpp-dev \
-    libcurl4-openssl-dev \
-    rdma-core \
-    ibverbs-providers \
-    infiniband-diags \
-    ibverbs-utils \
-    libssl-dev \
-    libhiredis-dev \
-    patchelf \
-    wget \
-    unzip \
-    python3 \
-    python3-pip \
-    ca-certificates \
+ARG CUDA_VERSION=12.8.1
+ARG UBUNTU_VERSION=22.04
+ARG PYTHON_VERSION=3.12
+
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION} AS builder
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PATH="/usr/local/go/bin:${PATH}"
+
+# ---- 基础工具 + Python ----
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl git ninja-build pkg-config \
+    software-properties-common build-essential cmake \
+    python${PYTHON_VERSION} python${PYTHON_VERSION}-dev python${PYTHON_VERSION}-venv \
+    libibverbs-dev libcurl4-openssl-dev liburing-dev libjemalloc-dev \
+    libhiredis-dev libnl-3-dev libnl-route-3-dev numactl \
+    && add-apt-repository -y ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y --no-install-recommends python${PYTHON_VERSION} \
+    && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
+    && update-alternatives --install /usr/bin/python python /usr/bin/python${PYTHON_VERSION} 1 \
+    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PYTHON_VERSION} 1 \
     && rm -rf /var/lib/apt/lists/*
 
-# ========== 2. 【关键】彻底清理 NVIDIA 镜像自带的 Go ==========
-# nvidia/cuda 镜像自带 Go，会导致 GOROOT 污染（internal/abi 冲突）
-RUN rm -rf \
-    /usr/local/go \
-    /usr/lib/go-* \
-    /usr/local/go-* \
-    /usr/share/go \
-    /usr/bin/go \
-    /etc/alternatives/go \
-    /var/lib/dpkg/info/golang*.list
+WORKDIR /workspace
+RUN git clone --depth 1 --branch v0.3.12 https://github.com/kvcache-ai/Mooncake.git . \
+    && git fetch --tags && git checkout v0.3.12
 
-# ========== 3. 安装官方 Go（>= 1.22，匹配 Mooncake etcd） ==========
-ENV GO_VERSION=1.22.5
-RUN wget -O go.tar.gz https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
-    && tar -C /usr/local -xzf go.tar.gz \
-    && rm go.tar.gz
+# ---- 装 yalantinglibs / Go / etcd_wrapper 依赖 ----
+RUN bash dependencies.sh -y
 
-ENV PATH=/usr/local/go/bin:$PATH
-ENV GOROOT=/usr/local/go
-
-# ========== 4. 验证 Go 环境（调试用，构建成功后可选删除） ==========
-RUN go version && go env GOROOT
-
-# ========== 5. 克隆 Mooncake 并初始化子模块 ==========
-WORKDIR /opt
-RUN git clone https://github.com/kvcache-ai/Mooncake.git \
- && cd Mooncake \
- && git checkout v0.3.11 \
- && git submodule update --init --recursive
-
-# ========== 6. 依赖准备（失败即退出，禁止 || true） ==========
-WORKDIR /opt/Mooncake
-RUN bash dependencies.sh
-
-# ========== 7. CMake 配置 ==========
-WORKDIR /opt/Mooncake/build
-RUN cmake .. \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DWITH_TE=ON \
-      -DWITH_STORE=OFF \
-      -DWITH_STORE_RUST=OFF \
-      -DBUILD_EXAMPLES=ON \
-      -DUSE_CUDA=ON \
-      -DUSE_MNNVL=ON \
-      -DUSE_TENT=ON \
-      -DUSE_ETCD=ON \
-      -DUSE_INTRA_NVLINK=ON \
-      -DUSE_TCP=ON \
-      -DUSE_HTTP=ON
-
-# ========== 8. 【关键】单线程构建 etcd_wrapper，避免吞错误 ==========
-RUN make VERBOSE=1 -j1 build_etcd_wrapper
-
-# ========== 9. 并行构建其余组件 ==========
-RUN make -j$(nproc) \
- && make install
-
-# ========== 10. 运行时库路径 ==========
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/lib:$LD_LIBRARY_PATH
-
-ENTRYPOINT ["bash"]
+# ---- 编译（TENT + CUDA + ETCD + Store etdc） ----
+RUN mkdir -p build && cd build \
+    && cmake -G Ninja .. \
+       -DCMAKE_BUILD_TYPE=Release \
+       -DUSE_CUDA=ON \
+       -DUSE_TENT=ON \
+       -DUSE_ETCD=ON \
+       -DSTORE_USE_ETCD=ON \
+       -DUSE_HTTP=ON \
+       -DBUILD_UNIT_TESTS=OFF \
+       -DBUILD_SHARED_LIBS=ON \
+       -DPython3_EXECUTABLE=/usr/bin/python${PYTHON_VERSION} \
+    && export LIBRARY_PATH=/usr/local/cuda/lib64/stubs:$LIBRARY_PATH \
+    && cmake --build . -j$(nproc)
+CMD ["bash"]
