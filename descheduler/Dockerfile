@@ -5,14 +5,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     git cmake g++ gcc build-essential \
     libibverbs-dev libnuma-dev libgoogle-glog-dev \
-    libgflags-dev libjsoncpp-dev libcurl4-openssl-dev \
+    libgflags-dev libjsoncpp-dev libcurl4-openssl-dev   golang  ca-certificates   rdma-core ibverbs-providers infiniband-diags  ibverbs-utils \
     libssl-dev libhiredis-dev patchelf wget unzip \
     python3 python3-pip && rm -rf /var/lib/apt/lists/*
-ENV GO_VERSION=1.22.5
-RUN wget -O go.tar.gz https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
-    && tar -C /usr/local -xzf go.tar.gz \
-    && rm go.tar.gz
-ENV PATH=/usr/local/go/bin:$PATH
+
 
 WORKDIR /opt
 RUN git clone https://github.com/kvcache-ai/Mooncake.git \
