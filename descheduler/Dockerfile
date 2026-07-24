@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     git cmake g++ gcc build-essential \
     libibverbs-dev libnuma-dev libgoogle-glog-dev \
-    libgflags-dev libjsoncpp-dev libcurl4-openssl-dev   golang  ca-certificates   rdma-core ibverbs-providers infiniband-diags  ibverbs-utils \
+    libgflags-dev libjsoncpp-dev libcurl4-openssl-dev      rdma-core ibverbs-providers infiniband-diags  ibverbs-utils \
     libssl-dev libhiredis-dev patchelf wget unzip \
     python3 python3-pip && rm -rf /var/lib/apt/lists/*
 ENV GO_VERSION=1.22.5
