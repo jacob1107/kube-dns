@@ -8,12 +8,18 @@ RUN apt-get update && apt-get install -y \
     libgflags-dev libjsoncpp-dev libcurl4-openssl-dev      rdma-core ibverbs-providers infiniband-diags  ibverbs-utils \
     libssl-dev libhiredis-dev patchelf wget unzip \
     python3 python3-pip && rm -rf /var/lib/apt/lists/*
-ENV GO_VERSION=1.22.5
+    
+RUN apt-get update && apt-get remove -y golang golang-go && \
+    rm -rf /usr/local/go /usr/lib/go
 
+# 安装官方 Go（版本 ≥ 1.22）
+ENV GO_VERSION=1.22.5
 RUN wget -O go.tar.gz https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
-    && rm -rf /usr/local/go \
     && tar -C /usr/local -xzf go.tar.gz \
     && rm go.tar.gz
+
+ENV PATH=/usr/local/go/bin:$PATH
+ENV GOROOT=/usr/local/go
 
 ENV PATH=/usr/local/go/bin:$PATH
 
