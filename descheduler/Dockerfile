@@ -18,19 +18,8 @@ RUN bash dependencies.sh -y
 
 # ---- 编译：TENT(NVLink) + CUDA(RDMA/GDR) + ETCD ----
 RUN mkdir -p build && cd build \
-    && cmake  .. \
-       -DCMAKE_BUILD_TYPE=Release \
-       -DUSE_CUDA=ON \
-       -DUSE_TENT=ON \
-       -DUSE_INTRA_NVLINK=ON \
-       -DUSE_ETCD=ON \
-       -DSTORE_USE_ETCD=ON \
-       -DUSE_HTTP=ON \
-       -DUSE_TCP=ON \
-       -DBUILD_UNIT_TESTS=OFF \
-       -DBUILD_SHARED_LIBS=ON \
-       -DPython3_EXECUTABLE=/usr/bin/python3 \
-    && cmake --build . -j$(nproc)
+    && cmake .. -DUSE_CUDA=ON -DUSE_TENT=ON
+    && make -j$(nproc) 
 
 RUN cp build/mooncake-transfer-engine/example/tebench /usr/local/bin/tebench \
     && cp build/mooncake-transfer-engine/example/transfer_engine_bench /usr/local/bin/transfer_engine_bench
