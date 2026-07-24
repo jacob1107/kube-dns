@@ -27,11 +27,19 @@ RUN apt-get update && apt-get install -y \
     unzip \
     python3 \
     python3-pip \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# ========== 2. 清理系统自带 Go ==========
-RUN apt-get remove -y golang golang-go || true \
-    && rm -rf /usr/local/go /usr/lib/go
+# ========== 2. 【关键】彻底清理 NVIDIA 镜像自带的 Go ==========
+# nvidia/cuda 镜像自带 Go，会导致 GOROOT 污染（internal/abi 冲突）
+RUN rm -rf \
+    /usr/local/go \
+    /usr/lib/go-* \
+    /usr/local/go-* \
+    /usr/share/go \
+    /usr/bin/go \
+    /etc/alternatives/go \
+    /var/lib/dpkg/info/golang*.list
 
 # ========== 3. 安装官方 Go（>= 1.22，匹配 Mooncake etcd） ==========
 ENV GO_VERSION=1.22.5
@@ -42,18 +50,21 @@ RUN wget -O go.tar.gz https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.g
 ENV PATH=/usr/local/go/bin:$PATH
 ENV GOROOT=/usr/local/go
 
-# ========== 4. 克隆 Mooncake 并初始化子模块 ==========
+# ========== 4. 验证 Go 环境（调试用，构建成功后可选删除） ==========
+RUN go version && go env GOROOT
+
+# ========== 5. 克隆 Mooncake 并初始化子模块 ==========
 WORKDIR /opt
 RUN git clone https://github.com/kvcache-ai/Mooncake.git \
  && cd Mooncake \
  && git checkout v0.3.11 \
  && git submodule update --init --recursive
 
-# ========== 5. 运行依赖脚本（失败即退出，关键！） ==========
+# ========== 6. 依赖准备（失败即退出，禁止 || true） ==========
 WORKDIR /opt/Mooncake
 RUN bash dependencies.sh
 
-# ========== 6. 构建 etcd_wrapper（单线程 + 详细日志，核心修复点） ==========
+# ========== 7. CMake 配置 ==========
 WORKDIR /opt/Mooncake/build
 RUN cmake .. \
       -DCMAKE_BUILD_TYPE=Release \
@@ -69,14 +80,14 @@ RUN cmake .. \
       -DUSE_TCP=ON \
       -DUSE_HTTP=ON
 
-# 👇 这是你之前一直缺的一步
+# ========== 8. 【关键】单线程构建 etcd_wrapper，避免吞错误 ==========
 RUN make VERBOSE=1 -j1 build_etcd_wrapper
 
-# ========== 7. 并行构建其余组件 ==========
+# ========== 9. 并行构建其余组件 ==========
 RUN make -j$(nproc) \
  && make install
 
-# ========== 8. 运行时库路径 ==========
+# ========== 10. 运行时库路径 ==========
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/lib:$LD_LIBRARY_PATH
 
 ENTRYPOINT ["bash"]
