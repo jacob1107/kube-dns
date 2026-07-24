@@ -1,18 +1,12 @@
 FROM nvidia/cuda:12.8.1-devel-ubuntu22.04
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    PYTHONUNBUFFERED=1 \
-    PATH="/usr/local/go/bin:${PATH}" \
-    LIBRARY_PATH="/usr/local/cuda/lib64/stubs:${LIBRARY_PATH}" \
-    LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
 
-# ---- 基础依赖（RDMA 关键：libibverbs-dev / librdmacm-dev / rdma-core） ----
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl git ninja-build cmake \
     build-essential python3 python3-dev python3-pip \
     libibverbs-dev librdmacm-dev rdma-core ibverbs-providers \
     libcurl4-openssl-dev liburing-dev libjemalloc-dev \
-    libhiredis-dev libnl-3-dev libnl-route-3-dev numactl  libibverbs \
+    libhiredis-dev libnl-3-dev libnl-route-3-dev numactl   \
     etcd-server \
     && rm -rf /var/lib/apt/lists/*
 
@@ -24,7 +18,7 @@ RUN bash dependencies.sh -y
 
 # ---- 编译：TENT(NVLink) + CUDA(RDMA/GDR) + ETCD ----
 RUN mkdir -p build && cd build \
-    && cmake -G Ninja .. \
+    && cmake  .. \
        -DCMAKE_BUILD_TYPE=Release \
        -DUSE_CUDA=ON \
        -DUSE_TENT=ON \
