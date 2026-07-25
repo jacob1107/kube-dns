@@ -8,9 +8,10 @@ RUN git clone https://github.com/kvcache-ai/Mooncake.git \
  && git checkout v0.3.12 \
  && bash dependencies.sh 
  
-RUN mkdir -p build  \
+RUN cd  Mooncake &&  mkdir -p build  \
  && cd build \
 && cmake .. -DUSE_TENT=ON \
+            -DTENT_METRICS_ENABLED=ON \
 && cmake --build . -j 
 
 ENTRYPOINT ["bash"]   
