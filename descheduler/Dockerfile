@@ -43,11 +43,4 @@ RUN cd Mooncake \
         -DUSE_TCP=ON \
         -DUSE_HTTP=ON \
     && make -j2 \
-    && make install
-
-# 拷贝 benchmark 工具
-RUN cp /workspace/Mooncake/build/mooncake-transfer-engine/example/tebench /usr/local/bin/tebench \
-    && cp /workspace/Mooncake/build/mooncake-transfer-engine/example/transfer_engine_bench /usr/local/bin/transfer_engine_bench
-
-WORKDIR /workspace
-CMD ["bash"]
+    && make install 
