@@ -42,7 +42,7 @@ RUN cd Mooncake \
         -DUSE_INTRA_NVLINK=ON \
         -DUSE_TCP=ON \
         -DUSE_HTTP=ON \
-    && make -j$(nproc) \
+    && make -j2 \
     && make install
 
 # 拷贝 benchmark 工具
