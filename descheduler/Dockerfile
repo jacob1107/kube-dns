@@ -14,6 +14,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+RUN curl -L https://dl.google.com/go/go1.22.6.linux-amd64.tar.gz -o go.tar.gz \
+    && tar -C /usr/local -xzf go.tar.gz \
+    && rm go.tar.gz \
+    && ln -sf /usr/local/go/bin/go /usr/bin/go && go --version
+    
 WORKDIR /workspace
 
 # 拉取 Mooncake 源码
