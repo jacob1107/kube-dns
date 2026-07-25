@@ -17,17 +17,8 @@ RUN git clone https://github.com/kvcache-ai/Mooncake.git \
 
 WORKDIR /opt/Mooncake/build
 RUN cmake .. \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DWITH_TE=ON \
-      -DWITH_STORE=OFF \
-      -DWITH_STORE_RUST=OFF \
-      -DBUILD_EXAMPLES=ON \
-      -DUSE_CUDA=ON \
-      -DUSE_MNNVL=ON \
       -DUSE_TENT=ON \
-      -DUSE_INTRA_NVLINK=ON \
-      -DUSE_TCP=ON \
-      -DUSE_HTTP=ON \
+    
  && make -j$(nproc) \
  && make install
 
