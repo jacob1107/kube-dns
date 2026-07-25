@@ -2,7 +2,7 @@ FROM nvidia/cuda:12.8.1-devel-ubuntu22.04
 
 RUN apt-get update && apt-get install -y     git cmake 
 
-WORKDIR /opt
+
 RUN git clone https://github.com/kvcache-ai/Mooncake.git \
  && cd Mooncake \
  && git checkout v0.3.12 \
