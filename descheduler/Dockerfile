@@ -13,5 +13,4 @@ RUN mkdir -p build  \
 && cmake .. -DUSE_TENT=ON \
 && cmake --build . -j 
 
-ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 ENTRYPOINT ["bash"]   
