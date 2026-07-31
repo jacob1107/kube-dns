@@ -1,1 +1,1 @@
-FROM nvidia/cuda:12.1.1-devel-ubuntu22.04
+FROM  jacob1107/backend-vllm:nixl-latest-0730
